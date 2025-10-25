@@ -8,8 +8,8 @@ import org.example.userservice.Models.Tokens;
 import org.example.userservice.Models.User;
 
 public interface UserService {
-    public User signup(String name, String email, String password) throws UserAlreadyExistsException;
-    public Tokens login(String email, String password) throws UserNotFoundException, InvalidPasswordException;
+    User signup(String name, String email, String password) throws UserAlreadyExistsException;
+    Tokens login(String email, String password) throws UserNotFoundException, InvalidPasswordException;
     User validateToken(String token) throws InvalidTokenException;
     void logout(String token) throws InvalidTokenException;
 

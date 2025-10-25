@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private UserService userService;
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -57,7 +57,9 @@ public class UserController {
             TokenDTO tokenDTO = new TokenDTO();
             tokenDTO.setTokenValue(token.getTokenValue());
             tokenDTO.setExpiryAt(token.getExpiryAt());
-            tokenDTO.setEmail(token.getUser().getEmail());
+            if (token.getUser() != null) {
+                tokenDTO.setEmail(token.getUser().getEmail());
+            }
 
             responseDTO.setTokenDto(tokenDTO);
             responseDTO.setMessage("Login Successful");
@@ -71,7 +73,7 @@ public class UserController {
 
 
     @PostMapping("/validate")
-    public ResponseEntity<UserDTO> validateToken(@RequestHeader("Authorization") String token) throws UserNotFoundException, InvalidTokenException {
+    public ResponseEntity<UserDTO> validateToken(@RequestHeader("Authorization") String token) throws InvalidTokenException {
         User user = userService.validateToken(token);
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
